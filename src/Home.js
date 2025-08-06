@@ -1,12 +1,12 @@
 import './App.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Adicionado aqui
+import { useNavigate } from 'react-router-dom';
 import logo from './assets/logo.png';
 import logo_branca from './assets/logo_branca.png';
 
 function App() {
     const [hover, setHover] = useState(false);
-    const navegar = useNavigate(); // ⬅️ Hook para navegação
+    const navegar = useNavigate();
 
     const fundoInicio = {
         backgroundColor: '#CDD5C6',

@@ -1,5 +1,6 @@
 import './App.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // IMPORTANTE
 import sala from './assets/sala-de-estar.png';
 import cozinha from './assets/spoon-and-fork (1).png';
 import elevacao from './assets/elevacao.png';
@@ -9,6 +10,7 @@ import garagem from './assets/private-garage.png';
 
 function App() {
     const [hoverCard, setHoverCard] = useState(null);
+    const navigate = useNavigate(); // Hook para mudar de tela
 
     const fundo = {
         backgroundColor: '#CDD5C6',
@@ -43,7 +45,7 @@ function App() {
         alignItems: 'center',
         justifyContent: 'center',
         transition: 'transform 0.3s ease',
-        cursor: 'pointer', // Aqui já muda o cursor
+        cursor: 'pointer',
     };
 
     const nomeCard = {
@@ -60,7 +62,6 @@ function App() {
         width: '200px',
     };
 
-    // função para aplicar hover
     const getCardStyle = (index) => {
         return {
             ...baseCard,
@@ -77,6 +78,7 @@ function App() {
                     style={getCardStyle(1)}
                     onMouseEnter={() => setHoverCard(1)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/SalaEstar')} // Redireciona
                 >
                     <img src={sala} style={imagem} />
                     <div style={nomeCard}>Sala de Estar</div>
@@ -86,6 +88,7 @@ function App() {
                     style={getCardStyle(2)}
                     onMouseEnter={() => setHoverCard(2)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/Cozinha')}
                 >
                     <img src={cozinha} style={imagem} />
                     <div style={nomeCard}>Cozinha</div>
@@ -95,6 +98,7 @@ function App() {
                     style={getCardStyle(3)}
                     onMouseEnter={() => setHoverCard(3)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/Quarto')}
                 >
                     <img src={dormindo} style={imagem} />
                     <div style={nomeCard}>Quarto</div>
@@ -104,15 +108,17 @@ function App() {
                     style={getCardStyle(4)}
                     onMouseEnter={() => setHoverCard(4)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/Banheiro')}
                 >
                     <img src={banho} style={imagem} />
                     <div style={nomeCard}>Banheiro</div>
                 </div>
 
-                <div
+                {/* <div
                     style={getCardStyle(5)}
                     onMouseEnter={() => setHoverCard(5)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/Garagem')}
                 >
                     <img src={garagem} style={imagem} />
                     <div style={nomeCard}>Garagem</div>
@@ -122,10 +128,11 @@ function App() {
                     style={getCardStyle(6)}
                     onMouseEnter={() => setHoverCard(6)}
                     onMouseLeave={() => setHoverCard(null)}
+                    onClick={() => navigate('/DadosAgregados')}
                 >
                     <img src={elevacao} style={imagem} />
                     <div style={nomeCard}>Dados Agregados</div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

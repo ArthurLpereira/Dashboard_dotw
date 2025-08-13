@@ -142,7 +142,12 @@
             "consumoWatts": 0
           },
           "config": {
-            "niveis_temperatura": ["frio", "morno", "quente", "super quente"]
+            "niveis_temperatura": [
+              "frio",
+              "morno",
+              "quente",
+              "super quente"
+            ]
           }
         }
       ]

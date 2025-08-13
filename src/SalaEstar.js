@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import voltar from './assets/volte (1).png';
 import lampada from './assets/lampada-incandescente.png';
+
 export default function SalaEstar() {
     const navigate = useNavigate();
 
@@ -31,109 +32,85 @@ export default function SalaEstar() {
         navigate(-1);
     };
 
+    // Estilos CSS
     const fundo = {
         backgroundColor: '#CDD5C6',
         minHeight: '100vh',
         padding: '20px',
         fontFamily: 'Questrial',
-    }
+    };
     const titulo = {
         color: 'white',
-    }
+    };
     const header = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         height: '60px',
-    }
+    };
     const voltarcss = {
         width: '40px',
         cursor: 'pointer',
         position: 'absolute',
         left: '20px',
-    }
+    };
     const main = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '30px',
-        height: '80vh'
-    }
+        height: '80vh',
+    };
 
-    const luzcss = {
+    const cardBase = {
         backgroundColor: '#FBF2ED',
         border: '5px solid #D8C2B5',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '180px',
+        height: '230px',
         width: '320px',
         borderRadius: '10px',
         gap: '10px',
-        padding: '15px'
-    }
+        padding: '15px',
+    };
 
     const lampadacss = {
-        width: '150px',
-    }
+        width: '100px',
+    };
 
     const tituloscards = {
         color: '#FFCFB3',
-        fontSize: '30px'
-    }
+        fontSize: '30px',
+        margin: '0',
+    };
 
     const txtcards = {
         color: '#A2A3A2',
-        fontSize: '20px'
-    }
+        fontSize: '20px',
+        margin: '0',
+    };
 
-    const sectioncss = {
+    const cardContainer = {
         display: 'flex',
-        alignItems: 'center',
+        flexWrap: 'wrap',
         justifyContent: 'center',
         gap: '30px',
-    }
-    const card1 = {
-        backgroundColor: '#FBF2ED',
-        border: '5px solid #D8C2B5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '180px',
-        width: '500px',
-        padding: '15px'
-    }
+        maxWidth: '1200px',
+    };
 
-    const card3 = {
-        backgroundColor: '#FBF2ED',
-        border: '5px solid #D8C2B5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '180px',
-        width: '220px',
-        padding: '15px'
-    }
-
-    const card4 = {
-        backgroundColor: '#FBF2ED',
-        border: '5px solid #D8C2B5',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '180px',
-        width: '600px',
-        padding: '15px'
-    }
     // Renderização condicional enquanto os dados estão carregando
     if (carregando) {
         return <div style={fundo}>Carregando...</div>;
     }
 
-    // Encontra o dispositivo de luz no array de dispositivos
-    const luz = dadosSala?.dispositivos?.find(d => d.tipo === 'luz');
+    // Renderização se não houver dados ou dispositivos
+    if (!dadosSala || !dadosSala.dispositivos) {
+        return <div style={fundo}>Nenhum dispositivo encontrado na sala de estar.</div>;
+    }
 
     return (
         <div style={fundo}>
@@ -144,120 +121,40 @@ export default function SalaEstar() {
                     onClick={handleVoltar}
                     style={voltarcss}
                 />
-                {/* 3. Acessa o nome do cômodo do estado */}
-                <h1 style={titulo}>{dadosSala?.nome}</h1>
+                <h1 style={titulo}>{dadosSala.nome}</h1>
             </header>
-
             <main style={main}>
-                <section style={sectioncss}>
-                    <div style={card1}>
-                        <h2>Alguma coisa</h2>
-                    </div>
-                    <div style={luzcss}>
-                        {/* 3. Acessa os dados do dispositivo de luz */}
-                        <div>
-                            {luz && (
+                <section style={cardContainer}>
+                    {/* Mapeia a lista de dispositivos para criar um card para cada um */}
+                    {dadosSala.dispositivos.map(dispositivo => (
+                        <div key={dispositivo.id} style={cardBase}>
+                            <h2 style={tituloscards}>{dispositivo.nome}</h2>
+                            {dispositivo.tipo === 'luz' && (
                                 <>
-                                    <h2 style={tituloscards}>{luz.nome}</h2>
-                                    <p style={txtcards}>Intensidade: {luz.estado.intensidade}</p>
-                                    <p style={txtcards}>Cor: {luz.estado.cor}</p>
-                                    <input
-                                        type="checkbox"
-                                        checked={luz.estado.ligado}
-                                        readOnly
-                                    />
-                                    <span> {luz.estado.ligado ? 'Ligado' : 'Desligado'}</span>
+                                    {/* <img src={lampada} style={lampadacss} alt="Lâmpada" /> */}
+                                    <p style={txtcards}>Intensidade: {dispositivo.estado.intensidade}%</p>
+                                    <p style={txtcards}>Cor: {dispositivo.estado.cor}</p>
+                                    <p style={txtcards}>Status: {dispositivo.estado.ligado ? 'Ligado' : 'Desligado'}</p>
+                                </>
+                            )}
+                            {dispositivo.tipo === 'smart_tv' && (
+                                <>
+                                    <p style={txtcards}>Volume: {dispositivo.estado.volume}</p>
+                                    <p style={txtcards}>App: {dispositivo.estado.canal_app}</p>
+                                    <p style={txtcards}>Status: {dispositivo.estado.ligado ? 'Ligado' : 'Desligado'}</p>
+                                </>
+                            )}
+                            {dispositivo.tipo === 'ar_condicionado' && (
+                                <>
+                                    <p style={txtcards}>Temperatura: {dispositivo.estado.temperatura}°C</p>
+                                    <p style={txtcards}>Modo: {dispositivo.estado.modo}</p>
+                                    <p style={txtcards}>Status: {dispositivo.estado.ligado ? 'Ligado' : 'Desligado'}</p>
                                 </>
                             )}
                         </div>
-                        <img src={lampada} style={lampadacss} />
-                    </div>
-                </section>
-
-                <section style={sectioncss}>
-                    <div style={card3}>
-                        <h2>Alguma coisa 2</h2>
-                    </div>
-                    <div style={card4}>
-                        <h2>Alguma coisa 3</h2>
-                    </div>
+                    ))}
                 </section>
             </main>
         </div>
     );
 }
-// export default function SalaEstar() {
-//     const [ambiente, setAmbiente] = useState(null);
-
-//     useEffect(() => {
-//         fetch("/dadosResidencia.json")
-//             .then((res) => res.json())
-//             .then((data) => {
-//                 setAmbiente(data.residencia.sala_de_estar);
-//             });
-//     }, []);
-
-//     if (!ambiente) return <p>Carregando...</p>;
-
-//     return (
-//         <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-//             <h1 style={{ color: "#333" }}>{ambiente.nome}</h1>
-//             <h2 style={{ color: "#555", borderBottom: "1px solid #ccc", paddingBottom: "10px" }}>
-//                 Dispositivos
-//             </h2>
-
-//             {ambiente.dispositivos.map((dispositivo) => (
-//                 <div
-//                     key={dispositivo.id}
-//                     style={{
-//                         border: "1px solid #ddd",
-//                         borderRadius: "8px",
-//                         padding: "15px",
-//                         marginBottom: "15px",
-//                         backgroundColor: "#f9f9f9",
-//                     }}
-//                 >
-//                     <h3 style={{ color: "#007BFF", margin: "0 0 10px 0" }}>
-//                         {dispositivo.nome} ({dispositivo.tipo})
-//                     </h3>
-
-//                     {/* Renderiza as propriedades do estado */}
-//                     {dispositivo.estado && (
-//                         <div style={{ marginBottom: "10px" }}>
-//                             <h4 style={{ color: "#333", margin: "0 0 5px 0" }}>Estado:</h4>
-//                             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-//                                 {Object.entries(dispositivo.estado).map(([chave, valor]) => (
-//                                     <li key={chave} style={{ marginBottom: "5px" }}>
-//                                         <strong style={{ textTransform: "capitalize" }}>{chave}:</strong>{" "}
-//                                         {
-//                                             // Trata a exibição de booleanos de forma mais amigável
-//                                             typeof valor === "boolean" ? (valor ? "Ligado" : "Desligado") : valor
-//                                         }
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-//                     )}
-
-//                     {/* Renderiza as propriedades de configuração, se existirem */}
-//                     {dispositivo.config && (
-//                         <div>
-//                             <h4 style={{ color: "#333", margin: "0 0 5px 0" }}>Configurações:</h4>
-//                             <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
-//                                 {Object.entries(dispositivo.config).map(([chave, valor]) => (
-//                                     <li key={chave} style={{ marginBottom: "5px" }}>
-//                                         <strong style={{ textTransform: "capitalize" }}>{chave}:</strong>{" "}
-//                                         {
-//                                             // Verifica se o valor é um array para exibi-lo corretamente
-//                                             Array.isArray(valor) ? valor.join(", ") : String(valor)
-//                                         }
-//                                     </li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-//                     )}
-//                 </div>
-//             ))}
-//         </div>
-//     );
-// }
